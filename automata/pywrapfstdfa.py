@@ -377,7 +377,7 @@ class PywrapfstDFA(object):
         Returns:
             DFA: The resulting DFA
         """
-        self.automaton.intersect(other.automaton)
+        self.automaton = fst.intersect(self.automaton, other.automaton)
         return  self
 
     def __and__(self, other):
