@@ -309,7 +309,7 @@ class PywrapfstDFA(object):
         Returns:
             None
         """
-        self.automaton = acceptor
+        self.automaton = acceptor.automaton
 
     def save(self, txt_fst_file_name):
         """
