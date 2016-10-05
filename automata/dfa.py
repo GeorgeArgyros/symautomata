@@ -21,7 +21,6 @@ try:
         pass
 except ImportError:
     print 'FAIL'
-    print 'Pywrapfst module is not installed. Fallback to python implementation:',
     try:
         print 'Checking for fst module:',
         imp.find_module('fsta')
@@ -34,7 +33,7 @@ except ImportError:
 
     except ImportError:
         print 'FAIL'
-        print 'Fst module is not installed. Fallback to python implementation:',
+        print 'Fallback to python implementation: OK'
         from pythondfa import PythonDFA, TropicalWeight
 
         class DFA(PythonDFA):
