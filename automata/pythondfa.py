@@ -130,7 +130,7 @@ class PythonDFA():
             self.isyms.__setitem__(char, num)
             self.osyms.__setitem__(char, num)
             num = num + 1
-        self.define()
+        #self.define()
 
     def __str__(self):
         """Describes DFA object"""
@@ -187,8 +187,15 @@ class PythonDFA():
             if s_idx >= len(self.states):
                 for i in range(len(self.states), s_idx + 1):
                     self.states.append(DFAState(i))
-        self.states[src].arcs.append(
-            DFAArc(src, dst, self.isyms.__getitem__(char)))
+        found = 0
+        for arc in self.states[src].arcs:
+            if arc.ilabel == self.isyms.__getitem__(char):
+                arc.dst = dst
+                found = 1
+                break
+        if not found:
+            self.states[src].arcs.append(
+                DFAArc(src, dst, self.isyms.__getitem__(char)))
 
     def fixminimized(self, alphabet):
         """
@@ -201,21 +208,22 @@ class PythonDFA():
         Returns:
             None
         """
-        endstate = self.add_state()
-        for state in self.states:
-            for char in alphabet:
-                found = 0
-                for arc in state.arcs:
-                    if self.isyms.find(arc.ilabel) == char:
-                        found = 1
-                        break
-                if found == 0:
-                    self.add_arc(state.stateid, endstate, char)
-
-        self[endstate].final = False
-
-        for char in alphabet:
-            self.add_arc(endstate, endstate, char)
+        return
+        # endstate = self.add_state()
+        # for state in self.states:
+        #     for char in alphabet:
+        #         found = 0
+        #         for arc in state.arcs:
+        #             if self.isyms.find(arc.ilabel) == char:
+        #                 found = 1
+        #                 break
+        #         if found == 0:
+        #             self.add_arc(state.stateid, endstate, char)
+        #
+        # self[endstate].final = False
+        #
+        # for char in alphabet:
+        #     self.add_arc(endstate, endstate, char)
 
     def _addsink(self, alphabet):
         """
