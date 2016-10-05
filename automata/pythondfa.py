@@ -201,7 +201,7 @@ class PythonDFA():
         Returns:
             None
         """
-        endstate = len(list(self.states))
+        endstate = self.add_state()
         for state in self.states:
             for char in alphabet:
                 found = 0

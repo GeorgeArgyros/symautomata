@@ -195,7 +195,7 @@ class PywrapfstDFA(object):
         """
         if src not in self.automaton.states():
             self.add_state()
-        arc = fst.Arc(self.isyms[char], 0, 1, dst)
+        arc = fst.Arc(self.isyms[char], self.osyms[char],  fst.Weight.One(self.automaton.weight_type), dst)
         self.automaton.add_arc(src, arc)
 
 
@@ -211,7 +211,7 @@ class PywrapfstDFA(object):
         Returns:
             None
         """
-        endstate = len(list(self.states))
+        endstate = self.add_state()
         for state in self.states:
             for char in alphabet:
                 found = 0
@@ -300,7 +300,6 @@ class PywrapfstDFA(object):
                 self.automaton.set_final(state, fst.Weight.One(self.automaton.weight_type))
 
 
-
     def init_from_acceptor(self, acceptor):
         """
         Adds a sink state
@@ -365,6 +364,7 @@ class PywrapfstDFA(object):
 
     def minimize(self):
         """Minimizes the DFA using Hopcroft algorithm"""
+        self.determinize()
         self.automaton.minimize()
 
     def intersect(self, other):
