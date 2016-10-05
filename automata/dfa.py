@@ -2,7 +2,7 @@
 # !/usr/bin/python
 import imp
 try:
-    print 'Checking for fst module:',
+    print 'Checking for pywrapfst module:',
     imp.find_module('pywrapfst')
     print 'OK'
     from pywrapfstdfa import PywrapfstDFA, TropicalWeight
@@ -12,9 +12,9 @@ try:
         pass
 except ImportError:
     print 'FAIL'
-    print 'Pywrapfst module is not installed. Fallback to python implementation:',
+    print 'Pywrapfst module is not installed.'
     try:
-        print 'Checking for fst module:',
+        print 'Checking for pyfst module:',
         imp.find_module('fst')
         print 'OK'
         from fstdfa import FstDFA, TropicalWeight
@@ -25,7 +25,8 @@ except ImportError:
 
     except ImportError:
         print 'FAIL'
-        print 'Fst module is not installed. Fallback to python implementation:',
+        print 'Fst module is not installed.'
+        print 'Fallback to python implementation:',
         from pythondfa import PythonDFA, TropicalWeight
 
         class DFA(PythonDFA):
