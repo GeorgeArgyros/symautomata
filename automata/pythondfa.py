@@ -54,7 +54,7 @@ class DFAArc:
         Args:
             srcstate_id (int): The source state identifier
             nextstate_id (int): The destination state identifier
-            ilabel (str): The character for the transition
+            ilabel (str): The symbol corresponding to character for the transition
         """
         self.srcstate = srcstate_id
         self.nextstate = nextstate_id
@@ -130,7 +130,6 @@ class PythonDFA():
             self.isyms.__setitem__(char, num)
             self.osyms.__setitem__(char, num)
             num = num + 1
-        #self.define()
 
     def __str__(self):
         """Describes DFA object"""
@@ -183,19 +182,18 @@ class PythonDFA():
         #     "State type should be integer."
         # assert char in self.I
         #
+        #print self.states
+        #print src
         for s_idx in [src, dst]:
             if s_idx >= len(self.states):
                 for i in range(len(self.states), s_idx + 1):
                     self.states.append(DFAState(i))
-        found = 0
         for arc in self.states[src].arcs:
             if arc.ilabel == self.isyms.__getitem__(char):
-                arc.dst = dst
-                found = 1
+                self.states[src].arcs.remove(arc);
                 break
-        if not found:
-            self.states[src].arcs.append(
-                DFAArc(src, dst, self.isyms.__getitem__(char)))
+        self.states[src].arcs.append(
+            DFAArc(src, dst, self.isyms.__getitem__(char)))
 
     def fixminimized(self, alphabet):
         """
@@ -685,7 +683,6 @@ class PythonDFA():
             Returns:
                 int: The new state identifier
             """
-
             if group not in statesmap:
                 sid = self.add_state()
                 self[sid].final = final
@@ -699,11 +696,13 @@ class PythonDFA():
         for group in groups:
             if len(list(group)) > 0:
                 sid = add_state_if_not_exists(frozenset(list(group)), statesmap, oldstates[list(group)[0]].final)
-                for arc in oldstates[list(group)[0]]:
-                    dst_group = findpart(arc.nextstate, groups)
-                    dst_sid = add_state_if_not_exists(
-                        dst_group, statesmap, oldstates[arc.nextstate].final)
-                    self.add_arc(sid, dst_sid, graph.isyms.find(arc.ilabel))
+                for state in list(group):
+                    for arc in oldstates[state]:
+                        dst_group = findpart(arc.nextstate, groups)
+                        dst_sid = add_state_if_not_exists(
+                            dst_group, statesmap, oldstates[arc.nextstate].final)
+                        self.add_arc(sid, dst_sid, graph.isyms.find(arc.ilabel))
+
         #
         # for state in oldstates:
         #     group = findpart(state.stateid, group_p)
@@ -728,7 +727,6 @@ class PythonDFA():
         dfa_1states = copy.deepcopy(self.states)
         dfa_2states = dfa_2.states
         self.states = []
-        self.define()
         states = {}
 
 
