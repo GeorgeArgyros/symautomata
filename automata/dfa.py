@@ -3,33 +3,33 @@
 import imp
 import copy
 try:
-    print 'Checking for pywrapfst module:',
-    imp.find_module('pywrapfst')
+    print 'Checking for fst module:',
+    imp.find_module('fst')
     print 'OK'
-    from pywrapfstdfa import PywrapfstDFA, TropicalWeight
+    from fstdfa import FstDFA, TropicalWeight
 
-    class DFA(PywrapfstDFA):
+
+    class DFA(FstDFA):
         """The DFA class implemented using openFst library"""
-        def copy(self):
-            mma = DFA()
-            mma.automaton =self.automaton.copy()
-            mma.alphabet = copy.deepcopy(self.alphabet)
-            mma.isyms = copy.deepcopy(self.isyms)
-            mma.osyms = copy.deepcopy(self.osyms)
-            return mma
-
         pass
 except ImportError:
     print 'FAIL'
     try:
-        print 'Checking for fst module:',
-        imp.find_module('fst')
+        print 'Checking for pywrapfst module:',
+        imp.find_module('pywrapfst')
         print 'OK'
-        from fstdfa import FstDFA, TropicalWeight
+        from pywrapfstdfa import PywrapfstDFA, TropicalWeight
 
-        class DFA(FstDFA):
+        class DFA(PywrapfstDFA):
             """The DFA class implemented using openFst library"""
-            pass
+
+            def copy(self):
+                mma = DFA()
+                mma.automaton = self.automaton.copy()
+                mma.alphabet = copy.deepcopy(self.alphabet)
+                mma.isyms = copy.deepcopy(self.isyms)
+                mma.osyms = copy.deepcopy(self.osyms)
+                return mma
 
     except ImportError:
         print 'FAIL'
