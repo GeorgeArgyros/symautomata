@@ -123,10 +123,11 @@ class PythonDFA():
         """
         self.states = []
         self.alphabet = alphabet
+        self.nfa = False
         num = 1
         self.isyms = syms()
         self.osyms = syms()
-        for char in alphabet:
+        for char in alphabet + [EPSILON]:
             self.isyms.__setitem__(char, num)
             self.osyms.__setitem__(char, num)
             num = num + 1
@@ -189,8 +190,8 @@ class PythonDFA():
                 for i in range(len(self.states), s_idx + 1):
                     self.states.append(DFAState(i))
         for arc in self.states[src].arcs:
-            if arc.ilabel == self.isyms.__getitem__(char):
-                self.states[src].arcs.remove(arc);
+            if arc.ilabel == self.isyms.__getitem__(char) or char == EPSILON:
+                self.nfa = True
                 break
         self.states[src].arcs.append(
             DFAArc(src, dst, self.isyms.__getitem__(char)))
@@ -421,6 +422,26 @@ class PythonDFA():
         self.union(other)
         return self
 
+
+    def _epsilon_closure(self, state):
+        """
+        Returns the \epsilon-closure for the state given as input.
+        """
+        closure = set([state.stateid])
+        stack = [state]
+        while True:
+            if not stack:
+                break
+            s = stack.pop()
+            for arc in s:
+                if self.isyms.find(arc.ilabel) != EPSILON or \
+                        arc.nextstate in closure:
+                    continue
+                closure.add(arc.nextstate)
+                stack.append(self.states[arc.nextstate])
+        return closure
+
+
     def determinize(self):
         """
         Transforms a Non Deterministic DFA into a Deterministic
@@ -428,9 +449,76 @@ class PythonDFA():
             None
         Returns:
             DFA: The resulting DFA
+
+        Creating an equivalent DFA is done using the standard algorithm.
+        A nice description can be found in the book:
+        Harry R. Lewis and Christos H. Papadimitriou. 1998.
+        E
+        print target_dfa_statelements of the Theory of Computation.
         """
-        # This function is not necessary
-        return  self
+
+        # Compute the \epsilon-closure for all states and save it in a diagram
+        epsilon_closure = {}
+        for state in self.states:
+            sid = state.stateid
+            epsilon_closure[sid] = self._epsilon_closure(state)
+
+        # Get a transition diagram to speed up computations
+        trans_table = {}
+        for state in self.states:
+            trans_table[state.stateid] = defaultdict(set)
+            for arc in state:
+                char = self.isyms.find(arc.ilabel)
+                trans_table[state.stateid][char].add(arc.nextstate)
+
+        # is_final function:
+        # Given a set of nfa states representing a dfa_state return 1 if the
+        # corresponding DFA state is a final state, i.e. if any of the
+        # corresponding NFA states are final.
+        is_final = lambda nfa_states, dfa_state: True \
+            if sum([ int(nfa_states[x].final) for x in dfa_state ]) >= 1 \
+            else False
+
+        # Precomputation is over, start executing the conversion algorithm
+        state_idx = 1
+        nfa_states = copy.deepcopy(self.states)
+        self.states = []
+        # Initialize the new DFA state list
+        self.add_state()
+        new_initial = epsilon_closure[nfa_states[0].stateid]
+        self.states[0].final = is_final(nfa_states, new_initial)
+
+        dfa_state_idx_map = { frozenset(new_initial) : 0 }
+        stack = [new_initial]
+        while True:
+            # Iterate until all added DFA states are processed.
+            if not stack:
+                break
+            # This is a set of states from the NFA
+            src_dfa_state = stack.pop()
+            src_dfa_state_idx = dfa_state_idx_map[frozenset(src_dfa_state)]
+            for char in self.alphabet:
+                # Compute the set of target states
+                target_dfa_state = set([])
+                for nfa_state in src_dfa_state:
+                    next_states = \
+                        set([y for x in trans_table[nfa_state][char] \
+                             for y in epsilon_closure[x] ])
+                    target_dfa_state.update(next_states)
+                # If the computed state set is not part of our new DFA add it,
+                # along with the transition for the current character.
+                if frozenset(target_dfa_state) not in dfa_state_idx_map:
+                    self.add_state()
+                    dfa_state_idx_map[frozenset(target_dfa_state)] = state_idx
+                    self.states[state_idx].final = is_final(nfa_states,
+                                                            target_dfa_state)
+                    state_idx += 1
+                    stack.append(target_dfa_state)
+
+                dst_state_idx = dfa_state_idx_map[frozenset(target_dfa_state)]
+                self.add_arc(src_dfa_state_idx, dst_state_idx, char)
+        return self
+
 
     def invert(self):
         """Inverts the DFA final states"""
@@ -497,7 +585,8 @@ class PythonDFA():
             Returns:
                 dict: The generated transition map
             """
-            return {x.stateid:{self.isyms.find(arc.ilabel): arc.nextstate for arc in x} for x in graph.states}
+            return {x.stateid:{self.isyms.find(arc.ilabel): arc.nextstate \
+                               for arc in x} for x in graph.states}
 
         def _create_reverse_transitions_representation(graph):
             """
@@ -509,7 +598,8 @@ class PythonDFA():
             Returns:
                 dict: The generated transition map
             """
-            return {x.stateid: {self.isyms.find(arc.ilabel): arc.nextstate for arc in x} for x in graph.states}
+            return {x.stateid: {self.isyms.find(arc.ilabel): arc.nextstate \
+                                for arc in x} for x in graph.states}
 
         def _reverse_to_source(target, group1):
             """
@@ -584,7 +674,8 @@ class PythonDFA():
             Return:
                 list: Returns the list of the accepted states
             """
-            return [state for state in graph if  state.final != TropicalWeight(float('inf'))]
+            return [state for state in graph \
+                    if  state.final != TropicalWeight(float('inf'))]
 
         graph = self
 
@@ -688,30 +779,25 @@ class PythonDFA():
                 self[sid].final = final
                 statesmap[group] = sid
             return statesmap[group]
+
         statesmap = {}
         self.states = []
         group = findpart(0, groups)
-        sid = add_state_if_not_exists(frozenset(list(group)), statesmap, oldstates[0].final)
+        sid = add_state_if_not_exists(frozenset(list(group)), statesmap,
+                                      oldstates[0].final)
         self[sid].initial = True
         for group in groups:
-            if len(list(group)) > 0:
-                sid = add_state_if_not_exists(frozenset(list(group)), statesmap, oldstates[list(group)[0]].final)
-                for state in list(group):
-                    for arc in oldstates[state]:
-                        dst_group = findpart(arc.nextstate, groups)
-                        dst_sid = add_state_if_not_exists(
-                            dst_group, statesmap, oldstates[arc.nextstate].final)
-                        self.add_arc(sid, dst_sid, graph.isyms.find(arc.ilabel))
+            if len(group) == 0:
+                continue
+            sid = add_state_if_not_exists(frozenset(group), statesmap,
+                                          oldstates[list(group)[0]].final)
+            state = next(iter(group))
+            for arc in oldstates[state]:
+                dst_group = findpart(arc.nextstate, groups)
+                dst_sid = add_state_if_not_exists(
+                    dst_group, statesmap, oldstates[arc.nextstate].final)
+                self.add_arc(sid, dst_sid, graph.isyms.find(arc.ilabel))
 
-        #
-        # for state in oldstates:
-        #     group = findpart(state.stateid, group_p)
-        #     sid = add_state_if_not_exists(group, statesmap, state.final)
-        #     for arc in state:
-        #         dst_group = findpart(arc.nextstate, group_p)
-        #         dst_sid = add_state_if_not_exists(
-        #             dst_group, statesmap, oldstates[arc.nextstate].final)
-        #         self.add_arc(sid, dst_sid, graph.isyms.find(arc.ilabel))
 
     def cross_product(self, dfa_2, accept_method):
         """A generalized cross-product constructor over two DFAs.
@@ -723,7 +809,6 @@ class PythonDFA():
         Returns:
             None
         """
-
         dfa_1states = copy.deepcopy(self.states)
         dfa_2states = dfa_2.states
         self.states = []
@@ -741,6 +826,7 @@ class PythonDFA():
                 dict: The generated transition map
             """
             return {self.isyms.find(arc.ilabel): graph[arc.nextstate] for arc in state}
+
 
         def _add_state_if_nonexistent(state_a, state_b):
             """
