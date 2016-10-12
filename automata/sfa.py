@@ -239,6 +239,35 @@ class SFA:
         return dfa
 
 
+    def save(self, txt_fst_filename):
+        """
+        Save the machine in the openFST format in the file denoted by
+        txt_fst_filename.
+        Args:
+            txt_fst_filename (str): The name of the file
+        Returns:
+            None
+        """
+        raise NotImplementedError('SFA save method not implemented')
+
+
+    def load(self, txt_fst_filename):
+        """
+        Save the transducer in the text file format of OpenFST.
+        The format is specified as follows:
+            arc format: src dest ilabel olabel [weight]
+            final state format: state [weight]
+        lines may occur in any order except initial state must be first line
+        Args:
+            txt_fst_filename (string): The name of the file
+        Returns:
+            None
+        """
+        raise NotImplementedError('SFA load method not implemented')
+
+
+
+
 def main():
     """Main Function"""
     alphabet = list(string.lowercase)  # + ["<", ">"]
