@@ -248,7 +248,8 @@ class SFA:
         Returns:
             None
         """
-        raise NotImplementedError('SFA save method not implemented')
+        dfa = self.concretize()
+        return dfa.save(txt_fst_filename)
 
 
     def load(self, txt_fst_filename):
