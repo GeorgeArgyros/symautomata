@@ -26,17 +26,15 @@ class FstDFA(fst.StdAcceptor):
     The underline library is pyfst, the python bindings of openFST library.
     """
 
-    def __init__(self, isyms=None):
+    def __init__(self, alphabet = createalphabet()):
         """
         Args:
-            isyms (list): pyfst input symbol list
+            alphabet (list): pyfst input symbol list
         Returns:
             None
         """
+        isyms = None
         fst.StdAcceptor.__init__(self, isyms)
-
-        alphabet = createalphabet()
-
         num = 1
         for char in alphabet:
             self.isyms.__setitem__(char, num)
