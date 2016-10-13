@@ -10,7 +10,7 @@ def _load_alphabet(filename):
     with open(filename, 'r') as f:
         return list(set(f.read()))
 
-def create_alphabet(filename=None):
+def createalphabet(filename=None):
     """
     Creates a sample alphabet containing printable ASCII characters
     """
