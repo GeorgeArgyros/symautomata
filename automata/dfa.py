@@ -42,7 +42,7 @@ def bfs(graph, start):
 
 try:
     print 'Checking for fst module:',
-    imp.find_module('fst')
+    imp.find_module('fsta')
     print 'OK'
     from fstdfa import FstDFA, TropicalWeight
 
@@ -144,6 +144,7 @@ except ImportError:
                 mmc = DFA(self.alphabet)
                 mmc.init_from_acceptor(mma & mmb)
                 mmc.minimize()
+                return mmc
 
             def to_regex(self):
                 """
@@ -204,6 +205,7 @@ except ImportError:
                 mmc = DFA(self.alphabet)
                 mmc.init_from_acceptor(mma & mmb)
                 mmc.minimize()
+                return mmc
 
             def to_regex(self):
                 """
