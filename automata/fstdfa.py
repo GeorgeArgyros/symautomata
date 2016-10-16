@@ -34,9 +34,10 @@ class FstDFA(fst.StdAcceptor):
             None
         """
         isyms = None
+        self.alphabet = alphabet
         fst.StdAcceptor.__init__(self, isyms)
         num = 1
-        for char in alphabet:
+        for char in self.alphabet:
             self.isyms.__setitem__(char, num)
             num = num + 1
 

@@ -70,17 +70,26 @@ try:
             """
             Automata Diff operation
             """
-            mma = DFA()
+            mma = DFA(self.alphabet)
             mma.init_from_acceptor(self)
-            mmb = DFA()
+            mmb = DFA(mmb.alphabet)
             mmb.init_from_acceptor(mmb)
             mma.minimize()
             mmb.complement(self.alphabet)
             mmb.minimize()
             mmc = self.mma & self.mmb
-            mmc.alphabet = self.alphabet
             mmc.minimize()
             return mmc
+
+        def to_regex(self):
+            """
+            Returns a regex approximation
+            Args:
+                None
+            Returns:
+                str: A regex approximation
+            """
+            return ""
         pass
 except ImportError:
     print 'FAIL'
@@ -123,17 +132,26 @@ except ImportError:
                 """
                 Automata Diff operation
                 """
-                mma = DFA()
+                mma = DFA(self.alphabet)
                 mma.init_from_acceptor(self)
-                mmb = DFA()
+                mmb = DFA(mmb.alphabet)
                 mmb.init_from_acceptor(mmb)
                 mma.minimize()
                 mmb.complement(self.alphabet)
                 mmb.minimize()
                 mmc = self.mma & self.mmb
-                mmc.alphabet = self.alphabet
                 mmc.minimize()
                 return mmc
+
+            def to_regex(self):
+                """
+                Returns a regex approximation
+                Args:
+                    None
+                Returns:
+                    str: A regex approximation
+                """
+                return ""
 
     except ImportError:
         print 'FAIL'
@@ -172,16 +190,25 @@ except ImportError:
                 """
                 Automata Diff operation
                 """
-                mma = DFA()
+                mma = DFA(self.alphabet)
                 mma.init_from_acceptor(self)
-                mmb = DFA()
+                mmb = DFA(mmb.alphabet)
                 mmb.init_from_acceptor(mmb)
                 mma.minimize()
                 mmb.complement(self.alphabet)
                 mmb.minimize()
                 mmc = self.mma & self.mmb
-                mmc.alphabet = self.alphabet
                 mmc.minimize()
                 return mmc
+
+            def to_regex(self):
+                """
+                Returns a regex approximation
+                Args:
+                    None
+                Returns:
+                    str: A regex approximation
+                """
+                return ""
 
             pass
