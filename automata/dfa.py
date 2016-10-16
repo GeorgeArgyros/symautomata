@@ -78,6 +78,7 @@ try:
             mmb.complement(self.alphabet)
             mmb.minimize()
             mmc = self.mma & self.mmb
+            mmc.alphabet = self.alphabet
             mmc.minimize()
             return mmc
         pass
@@ -130,6 +131,7 @@ except ImportError:
                 mmb.complement(self.alphabet)
                 mmb.minimize()
                 mmc = self.mma & self.mmb
+                mmc.alphabet = self.alphabet
                 mmc.minimize()
                 return mmc
 
@@ -178,6 +180,7 @@ except ImportError:
                 mmb.complement(self.alphabet)
                 mmb.minimize()
                 mmc = self.mma & self.mmb
+                mmc.alphabet = self.alphabet
                 mmc.minimize()
                 return mmc
 
