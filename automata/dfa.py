@@ -2,6 +2,44 @@
 # !/usr/bin/python
 import imp
 import copy
+from operator import attrgetter
+
+def bfs(graph, start):
+    """
+    Finds the shortest string using BFS
+    Args:
+        graph (DFA): The DFA states
+        start (DFA state): The DFA initial state
+    Returns:
+        str: The shortest string
+    """
+    # maintain a queue of paths
+    queue = []
+    visited = []
+    # maintain a queue of nodes
+    # push the first path into the queue
+    queue.append([['', start]])
+    while queue:
+        # get the first path from the queue
+        path = queue.pop(0)
+        # get the last node from the path
+        node = path[-1][1]
+        if node.stateid not in visited:
+            visited.append(node.stateid)
+            # path found
+            if node.final != TropicalWeight(float('inf')):
+                return "".join([mnode[0] for mnode in path])
+            # enumerate all adjacent nodes, construct a new path and push
+            # it into the queue
+            for arc in node.arcs:
+                char = graph.isyms.find(arc.ilabel)
+                next_state = graph[arc.nextstate]
+                # print next_state.stateid
+                if next_state.stateid not in visited:
+                    new_path = list(path)
+                    new_path.append([char, next_state])
+                    queue.append(new_path)
+
 try:
     print 'Checking for fst module:',
     imp.find_module('fst')
@@ -11,6 +49,37 @@ try:
 
     class DFA(FstDFA):
         """The DFA class implemented using openFst library"""
+        def shortest_string(self):
+            """
+            Uses BFS in order to find the shortest string
+            Args:
+                None
+            Returns:
+                str: The shortest string
+            """
+            initialstates = sorted(
+                self.states,
+                key=attrgetter('initial'),
+                reverse=True)
+            if len(initialstates) > 0:
+                return bfs(self, initialstates[0])
+            else:
+                return None
+
+        def diff(self, mmb):
+            """
+            Automata Diff operation
+            """
+            mma = DFA()
+            mma.init_from_acceptor(self)
+            mmb = DFA()
+            mmb.init_from_acceptor(mmb)
+            mma.minimize()
+            mmb.complement(self.alphabet)
+            mmb.minimize()
+            mmc = self.mma & self.mmb
+            mmc.minimize()
+            return mmc
         pass
 except ImportError:
     print 'FAIL'
@@ -31,6 +100,39 @@ except ImportError:
                 mma.osyms = copy.deepcopy(self.osyms)
                 return mma
 
+            def shortest_string(self):
+                """
+                Uses BFS in order to find the shortest string
+                Args:
+                    None
+                Returns:
+                    str: The shortest string
+                """
+                initialstates = sorted(
+                    self.states,
+                    key=attrgetter('initial'),
+                    reverse=True)
+                if len(initialstates) > 0:
+                    return bfs(self, initialstates[0])
+                else:
+                    return None
+
+
+            def diff(self, mmb):
+                """
+                Automata Diff operation
+                """
+                mma = DFA()
+                mma.init_from_acceptor(self)
+                mmb = DFA()
+                mmb.init_from_acceptor(mmb)
+                mma.minimize()
+                mmb.complement(self.alphabet)
+                mmb.minimize()
+                mmc = self.mma & self.mmb
+                mmc.minimize()
+                return mmc
+
     except ImportError:
         print 'FAIL'
         print 'Fallback to python implementation:OK'
@@ -46,4 +148,37 @@ except ImportError:
                 mma.isyms = copy.deepcopy(self.isyms)
                 mma.osyms = copy.deepcopy(self.osyms)
                 return mma
+
+            def shortest_string(self):
+                """
+                Uses BFS in order to find the shortest string
+                Args:
+                    None
+                Returns:
+                    str: The shortest string
+                """
+                initialstates = sorted(
+                    self.states,
+                    key=attrgetter('initial'),
+                    reverse=True)
+                if len(initialstates) > 0:
+                    return bfs(self, initialstates[0])
+                else:
+                    return None
+
+            def diff(self, mmb):
+                """
+                Automata Diff operation
+                """
+                mma = DFA()
+                mma.init_from_acceptor(self)
+                mmb = DFA()
+                mmb.init_from_acceptor(mmb)
+                mma.minimize()
+                mmb.complement(self.alphabet)
+                mmb.minimize()
+                mmc = self.mma & self.mmb
+                mmc.minimize()
+                return mmc
+
             pass
