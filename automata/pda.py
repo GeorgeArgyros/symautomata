@@ -1,7 +1,5 @@
 """This module contains the PDA implementation"""
 # !/usr/bin/python
-import imp
-from alphabet import createalphabet
 
 try:
     print 'Checking for pythonpda module:',

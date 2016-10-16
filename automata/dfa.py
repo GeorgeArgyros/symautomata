@@ -3,6 +3,7 @@
 import imp
 import copy
 from operator import attrgetter
+from regex import Regex
 
 def bfs(graph, start):
     """
@@ -90,8 +91,9 @@ try:
             Returns:
                 str: A regex approximation
             """
-            return ""
-        pass
+            converter = Regex(self)
+            return converter.get_regex()
+
 except ImportError:
     print 'FAIL'
     try:
@@ -151,7 +153,8 @@ except ImportError:
                 Returns:
                     str: A regex approximation
                 """
-                return ""
+                converter = Regex(self)
+                return converter.get_regex()
 
     except ImportError:
         print 'FAIL'
@@ -209,6 +212,5 @@ except ImportError:
                 Returns:
                     str: A regex approximation
                 """
-                return ""
-
-            pass
+                converter = Regex(self)
+                return converter.get_regex()
