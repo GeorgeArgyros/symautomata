@@ -4,9 +4,8 @@ from sys import argv
 from alphabet import createalphabet
 from cfggenerator import CFGGenerator
 from cfgpda import CfgPDA
-from fado import CNF, gRules
 from pda import PDAState
-
+from FAdo import cfg
 
 class IntersectionHandling():
     """
@@ -469,7 +468,7 @@ def main():
     print ' - Total CFG rules generated: ' + repr(len(grammar))
 
     if mode == 'STR':
-        gen = CFGGenerator(CNF(gRules(grammar)),
+        gen = CFGGenerator(cfg.CNF(cfg.gRules(grammar, ":")),
                            optimized=optimized,
                            splitstring=splitstring,
                            maxstate=maxstate)

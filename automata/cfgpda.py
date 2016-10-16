@@ -1,5 +1,5 @@
 """This module generates a PDA using a CFG as input"""
-from fado import CNF, gRules
+from FAdo import cfg
 from cnfpda import CnfPda
 
 class CfgPDA():
@@ -45,8 +45,8 @@ class CfgPDA():
         Returns:
             PDA: The generated PDA
         """
-        grammar = gRules(re_grammar)
-        cnfgrammar = CNF(grammar)
+        grammar = cfg.gRules(re_grammar, ":")
+        cnfgrammar = cfg.CNF(grammar)
 
         if not self.alphabet:
             self._extract_alphabet(cnfgrammar)

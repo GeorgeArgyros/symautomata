@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 import ez_setup
+import sys
+import os
+import imp
+import tempfile
 ez_setup.use_setuptools()
 
 PROJECT = 'automata'
@@ -38,9 +42,50 @@ setup(
     platforms=['Any'],
     scripts=[],
     provides=[],
-    install_requires=[],
+    install_requires=['FAdo'],
     namespace_packages=[],
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
 )
+
+def check_for_fst():
+    try:
+        print 'Checking for fst module:',
+        imp.find_module('fst')
+        print 'OK'
+    except ImportError:
+        print 'FAIL'
+        try:
+            print 'Checking for pywrapfst module:',
+            imp.find_module('pywrapfst')
+            print 'OK'
+        except ImportError:
+            print 'FAIL'
+            print 'It is recommended to use openfst python bindings (either pyfst or pywrapfst)' \
+                  ' for the DFA implementation. While this is not necessary, using openfst python' \
+                  ' bindings will increase execution speed significally.'
+            if not os.path.isfile('/usr/sbin/dnsmasq'):
+                install = raw_input(
+                    ('* Install pywrapfst now? [y/n] ')
+                )
+                if install == 'y':
+                    current = os.getcwd()
+                    temp = tempfile.gettempdir()
+                    os.system('wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.5.3.tar.gz -P '+temp)
+                    if os.path.isfile(temp+'/openfst-1.5.3.tar.gz'):
+                        os.system('cd '+temp+' && tar zxvf openfst-1.5.3.tar.gz')
+                        os.system('cd '+temp+'/openfst-1.5.3 && ./configure --enable-python')
+                        os.system('cd '+temp+'/openfst-1.5.3 && make')
+                        os.system('cd '+temp+'/openfst-1.5.3 && sudo make install')
+                        os.system('cd '+current)
+                    else:
+                        sys.exit(('It was not possible to install'
+                                  'pywrapfst module. The application'
+                                  'will fallback to a python '
+                                  'implementation during execution'))
+                else:
+                    sys.exit(('The application will fallback to a python '
+                              'implementation during execution'))
+
+check_for_fst()
