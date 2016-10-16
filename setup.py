@@ -65,27 +65,26 @@ def check_for_fst():
             print 'It is recommended to use openfst python bindings (either pyfst or pywrapfst)' \
                   ' for the DFA implementation. While this is not necessary, using openfst python' \
                   ' bindings will increase execution speed significally.'
-            if not os.path.isfile('/usr/sbin/dnsmasq'):
-                install = raw_input(
-                    ('* Install pywrapfst now? [y/n] ')
-                )
-                if install == 'y':
-                    current = os.getcwd()
-                    temp = tempfile.gettempdir()
-                    os.system('wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.5.3.tar.gz -P '+temp)
-                    if os.path.isfile(temp+'/openfst-1.5.3.tar.gz'):
-                        os.system('cd '+temp+' && tar zxvf openfst-1.5.3.tar.gz')
-                        os.system('cd '+temp+'/openfst-1.5.3 && ./configure --enable-python')
-                        os.system('cd '+temp+'/openfst-1.5.3 && make')
-                        os.system('cd '+temp+'/openfst-1.5.3 && sudo make install')
-                        os.system('cd '+current)
-                    else:
-                        sys.exit(('It was not possible to install'
-                                  'pywrapfst module. The application'
-                                  'will fallback to a python '
-                                  'implementation during execution'))
+            install = raw_input(
+                ('* Install pywrapfst now? [y/n] ')
+            )
+            if install == 'y':
+                current = os.getcwd()
+                temp = tempfile.gettempdir()
+                os.system('wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.5.3.tar.gz -P '+temp)
+                if os.path.isfile(temp+'/openfst-1.5.3.tar.gz'):
+                    os.system('cd '+temp+' && tar zxvf openfst-1.5.3.tar.gz')
+                    os.system('cd '+temp+'/openfst-1.5.3 && ./configure --enable-python')
+                    os.system('cd '+temp+'/openfst-1.5.3 && make')
+                    os.system('cd '+temp+'/openfst-1.5.3 && sudo make install')
+                    os.system('cd '+current)
                 else:
-                    sys.exit(('The application will fallback to a python '
+                    sys.exit(('It was not possible to install'
+                              'pywrapfst module. The application'
+                              'will fallback to a python '
                               'implementation during execution'))
+            else:
+                sys.exit(('The application will fallback to a python '
+                          'implementation during execution'))
 
 check_for_fst()
