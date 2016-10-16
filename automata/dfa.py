@@ -66,14 +66,14 @@ try:
             else:
                 return None
 
-        def diff(self, mmb):
+        def diff(self, input_mm):
             """
             Automata Diff operation
             """
             mma = DFA(self.alphabet)
             mma.init_from_acceptor(self)
-            mmb = DFA(mmb.alphabet)
-            mmb.init_from_acceptor(mmb)
+            mmb = DFA(input_mm.alphabet)
+            mmb.init_from_acceptor(input_mm)
             mma.minimize()
             mmb.complement(self.alphabet)
             mmb.minimize()
@@ -128,22 +128,20 @@ except ImportError:
                 else:
                     return None
 
-
-            def diff(self, mmb):
+            def diff(self, input_mm):
                 """
                 Automata Diff operation
                 """
                 mma = DFA(self.alphabet)
                 mma.init_from_acceptor(self)
-                mmb = DFA(mmb.alphabet)
-                mmb.init_from_acceptor(mmb)
+                mmb = DFA(input_mm.alphabet)
+                mmb.init_from_acceptor(input_mm)
                 mma.minimize()
                 mmb.complement(self.alphabet)
                 mmb.minimize()
                 mmc = DFA(self.alphabet)
                 mmc.init_from_acceptor(mma & mmb)
                 mmc.minimize()
-                return mmc
 
             def to_regex(self):
                 """
@@ -188,21 +186,20 @@ except ImportError:
                 else:
                     return None
 
-            def diff(self, mmb):
+            def diff(self, input_mm):
                 """
                 Automata Diff operation
                 """
                 mma = DFA(self.alphabet)
                 mma.init_from_acceptor(self)
-                mmb = DFA(mmb.alphabet)
-                mmb.init_from_acceptor(mmb)
+                mmb = DFA(input_mm.alphabet)
+                mmb.init_from_acceptor(input_mm)
                 mma.minimize()
                 mmb.complement(self.alphabet)
                 mmb.minimize()
                 mmc = DFA(self.alphabet)
                 mmc.init_from_acceptor(mma & mmb)
                 mmc.minimize()
-                return mmc
 
             def to_regex(self):
                 """
