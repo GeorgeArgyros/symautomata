@@ -72,7 +72,7 @@ try:
             """
             mma = DFA(self.alphabet)
             mma.init_from_acceptor(self)
-            mmb = DFA(input_mm.alphabet)
+            mmb = DFA(self.alphabet)
             mmb.init_from_acceptor(input_mm)
             mma.minimize()
             mmb.complement(self.alphabet)
@@ -136,7 +136,7 @@ except ImportError:
                 """
                 mma = DFA(self.alphabet)
                 mma.init_from_acceptor(self)
-                mmb = DFA(input_mm.alphabet)
+                mmb = DFA(self.alphabet)
                 mmb.init_from_acceptor(input_mm)
                 mma.minimize()
                 mmb.complement(self.alphabet)
@@ -196,7 +196,7 @@ except ImportError:
                 """
                 mma = DFA(self.alphabet)
                 mma.init_from_acceptor(self)
-                mmb = DFA(input_mm.alphabet)
+                mmb = DFA(self.alphabet)
                 mmb.init_from_acceptor(input_mm)
                 mma.minimize()
                 mmb.complement(self.alphabet)
