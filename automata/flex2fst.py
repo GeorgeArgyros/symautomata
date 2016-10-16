@@ -6,6 +6,7 @@ import os
 import random
 import re
 import string
+import tempfile
 from subprocess import call
 from sys import argv
 
@@ -268,7 +269,8 @@ class Flexparser:
         Returns:
             DFA: A dfa automaton
         """
-        self.outfile = ''.join(
+        temp = tempfile.gettempdir()
+        self.outfile = temp+'/'+''.join(
             random.choice(
                 string.ascii_uppercase + string.digits) for _ in range(5)) + '_lex.yy.c'
         self._create_automaton_from_regex(lexfile)
