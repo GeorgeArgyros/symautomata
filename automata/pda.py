@@ -1,124 +1,17 @@
-"""
-This module performs all basic PDA operations.
-It is an interface for push down automata.
-"""
+"""This module contains the PDA implementation"""
+# !/usr/bin/python
+import imp
+from pdadiff import PdaDiff
+from alphabet import createalphabet
 
+try:
+    print 'Checking for pythonpda module:',
+    imp.find_module('pythonpda')
+    print 'OK'
+    from pythonpda import PythonPDA
 
-class PDAState(object):
-    """This is the structure for a PDA state"""
-    type = 0
-    sym = 0
-    trans = None
-    id = 0
-
-    def printer(self):
-        """Prints PDA state attributes"""
-        print " ID " + repr(self.id)
-        if self.type == 0:
-            print " Tag: - "
-            print " Start State - "
-        elif self.type == 1:
-            print " Push " + repr(self.sym)
-        elif self.type == 2:
-            print " Pop State " + repr(self.sym)
-        elif self.type == 3:
-            print " Read State " + repr(self.sym)
-        elif self.type == 4:
-            print " Stop State " + repr(self.sym)
-        for j in self.trans:
-            if len(self.trans[j]) > 1 or (len(self.trans[j]) == 1):
-                for symbol in self.trans[j]:
-                    print " On Symbol " + repr(symbol) + " Transition To State " + repr(j)
-
-    def __init__(self):
-        """State Initialization"""
-        self.trans = {}
-
-
-class PDA(object):
-    """This is the structure for a PDA"""
-    n = 0
-    s = None
-    accepted = None
-    terminals = None
-    nonterminals = None
-
-    def printer(self):
-        """Prints PDA states and their attributes"""
-        i = 0
-        while i < self.n + 1:
-            print "--------- State No --------" + repr(i)
-            self.s[i].printer()
-            i = i + 1
-
-    def parse(self, mystr, stack=[], state=1, curchar=0, depth=0):
-        """
-        Consumes an input and validates if it is accepted
-        Args:
-            mystr (str): the input string to be consumes
-            stack (list): the stack of symbols
-            state (int): the current state of the PDA
-            curchar (int): the index of the consumed character
-            depth (int): the depth of the function call in the stack
-        Returns:
-            bool: A value indicating the correct or erroneous execution
-        """
-        mystrsplit = mystr.split(' ')
-        if self.s[state].type == 1:
-            print 'Appending ' + repr(self.s[state].sym)
-            stack.append(self.s[state].sym)
-            state = self.s[state].trans[0]
-            print 'next state is ' + repr(state)
-            if self.parse(
-                    mystr,
-                    stack=stack,
-                    state=state,
-                    curchar=curchar,
-                    depth=depth + 1) == 1:
-                return 1
-            return -1
-        if self.s[state].type == 2:
-            if len(stack) == 0:
-                print 'goback1'
-                return -1
-            sym = stack.pop()
-            print 'poping ' + repr(sym)
-            for key in self.s[state].trans:
-                if sym in self.s[state].trans[key]:
-                    print 'found'
-                    print 'lets try as next state the state ' + repr(key)
-                    if self.parse(
-                            mystr,
-                            stack=stack,
-                            state=key,
-                            curchar=curchar,
-                            depth=depth + 1) == 1:
-                        return 1
-            print 'goback2'
-            return -1
-        if self.s[state].type == 3:
-            print 'Now lets read and check'
-            for key in self.s[state].trans:
-                if mystrsplit[curchar] in self.s[state].trans[key]:
-                    # print 'found '
-                    if curchar + 1 == len(mystrsplit) \
-                            and 'closing' in self.s[key].trans:
-                        print 'accepted'
-                        return 1
-                    elif curchar + 1 == len(mystrsplit):
-                        print 'rejected'
-                        return -1
-
-                    # print 'lets try as next state the state ' + repr(key)
-                    if self.parse(
-                            mystr,
-                            stack=stack,
-                            state=key,
-                            curchar=curchar + 1,
-                            depth=depth + 1) == 1:
-                        return 1
-            print 'goback3'
-            return -1
+    class PDA(PythonPDA):
+        """This is the structure for a PDA"""
 
         def shortest_string(self):
             """
@@ -128,20 +21,17 @@ class PDA(object):
             Returns:
                 str: The shortest string
             """
-            pass
+            ops = PdaDiff(None, None, self.alphabet)
+            ops.mmc = self
+            return ops.get_string()
 
         def diff(self, mmb):
             """
             Automata Diff operation
             """
-            pass
+            ops = PdaDiff(self, mmb, self.alphabet)
+            mmc = ops.diff()
+            return mmc
 
-    def __init__(self, alphabet):
-        """
-        Args:
-            alphabet (list): the input alphabet
-        Returns:
-            None
-        """
-        self.s = {}
-        self.alphabet = alphabet
+except ImportError:
+    print 'FAIL'
