@@ -123,7 +123,7 @@ class FstDFA(fst.StdAcceptor):
         for state in states:
             for arc in state.arcs:
                 itext = acceptor.isyms.find(arc.ilabel)
-                if itext in createalphabet():
+                if itext in self.alphabet:
                     self.add_arc(state.stateid, arc.nextstate, itext)
             if state.final:
                 self[state.stateid].final = True

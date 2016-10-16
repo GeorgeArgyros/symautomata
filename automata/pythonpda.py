@@ -35,6 +35,55 @@ class PDAState(object):
         self.trans = {}
 
 
+class syms:
+    """The DFA accepted symbols"""
+
+    def __init__(self):
+        """Initialize symbols"""
+        self.symbols = {}
+        self.reversesymbols = {}
+
+    def __getitem__(self, char):
+        """
+        Finds a symbol identifier based on the input character
+        Args:
+            char (str): The symbol character
+        Returns:
+            int: The retrieved symbol identifier
+        """
+        return self.reversesymbols[char]
+
+    def __setitem__(self, char, num):
+        """
+        Sets a symbol
+        Args:
+            char (str): The symbol character
+            num (int): The  symbol identifier
+        Returns:
+           None
+        """
+        self.symbols[num] = char
+        self.reversesymbols[char] = num
+
+    def find(self, num):
+        """
+        Finds a symbol based on its identifier
+        Args:
+            num (int): The symbol identifier
+        Returns:
+            str: The retrieved symbol
+        """
+        return self.symbols[num]
+
+    def items(self):
+        """Returns all stored symbols
+        Args:
+            None
+        Returns:
+            dict:The included symbols
+        """
+        return self.symbols
+
 class PythonPDA(object):
     """This is the structure for a PDA"""
     n = 0
@@ -42,6 +91,7 @@ class PythonPDA(object):
     accepted = None
     terminals = None
     nonterminals = None
+
 
     def printer(self):
         """Prints PDA states and their attributes"""
@@ -130,3 +180,11 @@ class PythonPDA(object):
         """
         self.s = {}
         self.alphabet = alphabet
+
+        num = 1
+        self.isyms = syms()
+        self.osyms = syms()
+        for char in alphabet:
+            self.isyms.__setitem__(char, num)
+            self.osyms.__setitem__(char, num)
+            num = num + 1
