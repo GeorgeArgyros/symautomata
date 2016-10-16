@@ -120,6 +120,22 @@ class PDA(object):
             print 'goback3'
             return -1
 
+        def shortest_string(self):
+            """
+            Uses BFS in order to find the shortest string
+            Args:
+                None
+            Returns:
+                str: The shortest string
+            """
+            pass
+
+        def diff(self, mmb):
+            """
+            Automata Diff operation
+            """
+            pass
+
     def __init__(self, alphabet):
         """
         Args:

@@ -77,7 +77,8 @@ try:
             mma.minimize()
             mmb.complement(self.alphabet)
             mmb.minimize()
-            mmc = mma & mmb
+            mmc = DFA(self.alphabet)
+            mmc.init_from_acceptor(mma & mmb)
             mmc.minimize()
             return mmc
 
@@ -139,7 +140,8 @@ except ImportError:
                 mma.minimize()
                 mmb.complement(self.alphabet)
                 mmb.minimize()
-                mmc = mma & mmb
+                mmc = DFA(self.alphabet)
+                mmc.init_from_acceptor(mma & mmb)
                 mmc.minimize()
                 return mmc
 
@@ -197,7 +199,8 @@ except ImportError:
                 mma.minimize()
                 mmb.complement(self.alphabet)
                 mmb.minimize()
-                mmc = mma & mmb
+                mmc = DFA(self.alphabet)
+                mmc.init_from_acceptor(mma & mmb)
                 mmc.minimize()
                 return mmc
 
