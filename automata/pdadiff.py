@@ -7,11 +7,10 @@ from sys import argv
 
 import datetime
 import dateutil.relativedelta
-
+from FAdo import cfg
 from alphabet import createalphabet
 from cfggenerator import CFGGenerator
 from cfgpda import CfgPDA
-from fado import CNF, gRules
 from flex2fst import Flexparser
 from pda import PDA, PDAState
 from pdacnf import PdaCnf, IntersectionHandling, SimplifyStateIDs, ReadReplace, ReducePDA
@@ -238,7 +237,7 @@ class PdaDiff():
             print '* Initiating string from CFG generation'
             grammar = cnfgenerator.get_rules(optimized)
             print ' - Total grammar rules are ' + repr(len(grammar))
-            gen = CFGGenerator(CNF(gRules(grammar)),
+            gen = CFGGenerator(cfg.CNF(cfg.gRules(grammar, ":")),
                                optimized=optimized,
                                splitstring=0,
                                maxstate=maxstate)

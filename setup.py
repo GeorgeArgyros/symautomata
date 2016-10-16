@@ -42,7 +42,7 @@ setup(
     platforms=['Any'],
     scripts=[],
     provides=[],
-    install_requires=['FAdo'],
+    install_requires=['FAdo', 'python-dateutil'],
     namespace_packages=[],
     packages=find_packages(),
     include_package_data=True,
