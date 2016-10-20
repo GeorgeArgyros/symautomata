@@ -128,12 +128,10 @@ class PythonPDA(object):
             return False
         if self.s[state].type == 2:
             if len(stack) == 0:
-                return -1
+                return False
             sym = stack.pop()
             for key in self.s[state].trans:
                 if sym in self.s[state].trans[key]:
-                    print 'found'
-                    print 'lets try as next state the state ' + repr(key)
                     if self.parse(
                             mystr,
                             stack=stack,
@@ -141,7 +139,7 @@ class PythonPDA(object):
                             curchar=curchar,
                             depth=depth + 1) == 1:
                         return True
-            return -1
+            return False
         if self.s[state].type == 3:
             for key in self.s[state].trans:
                 if mystrsplit[curchar] in self.s[state].trans[key]:
