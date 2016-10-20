@@ -199,7 +199,6 @@ class PdaDiff():
             print "- Total PDA states after reduction are " + repr(len(newpda))
             return_string = stringgen.init(newpda, self.mmc.accepted)
             if return_string is not None:
-                print return_string
                 return_string = return_string[0]
         elif method == 'PDACFGSTRING':
 
