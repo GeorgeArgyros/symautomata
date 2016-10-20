@@ -169,6 +169,7 @@ class PdaDiff():
         print 'start intersection'
         self.mmc = self._intesect()
         print 'end intersection'
+        return self.mmc
 
     def get_string(self):
         """

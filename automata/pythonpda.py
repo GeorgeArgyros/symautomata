@@ -101,7 +101,7 @@ class PythonPDA(object):
             self.s[i].printer()
             i = i + 1
 
-    def parse(self, mystr, stack=[], state=1, curchar=0, depth=0):
+    def consume_input(self, mystr, stack=[], state=1, curchar=0, depth=0):
         """
         Consumes an input and validates if it is accepted
         Args:
@@ -125,14 +125,12 @@ class PythonPDA(object):
                     state=state,
                     curchar=curchar,
                     depth=depth + 1) == 1:
-                return 1
-            return -1
+                return True
+            return False
         if self.s[state].type == 2:
             if len(stack) == 0:
-                print 'goback1'
                 return -1
             sym = stack.pop()
-            print 'poping ' + repr(sym)
             for key in self.s[state].trans:
                 if sym in self.s[state].trans[key]:
                     print 'found'
@@ -143,21 +141,17 @@ class PythonPDA(object):
                             state=key,
                             curchar=curchar,
                             depth=depth + 1) == 1:
-                        return 1
-            print 'goback2'
+                        return True
             return -1
         if self.s[state].type == 3:
-            print 'Now lets read and check'
             for key in self.s[state].trans:
                 if mystrsplit[curchar] in self.s[state].trans[key]:
                     # print 'found '
                     if curchar + 1 == len(mystrsplit) \
                             and 'closing' in self.s[key].trans:
-                        print 'accepted'
-                        return 1
+                        return True
                     elif curchar + 1 == len(mystrsplit):
-                        print 'rejected'
-                        return -1
+                        return False
 
                     # print 'lets try as next state the state ' + repr(key)
                     if self.parse(
@@ -166,9 +160,8 @@ class PythonPDA(object):
                             state=key,
                             curchar=curchar + 1,
                             depth=depth + 1) == 1:
-                        return 1
-            print 'goback3'
-            return -1
+                        return True
+            return False
 
 
     def __init__(self, alphabet):
