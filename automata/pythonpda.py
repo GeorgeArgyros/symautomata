@@ -115,17 +115,16 @@ class PythonPDA(object):
         """
         mystrsplit = mystr.split(' ')
         if self.s[state].type == 1:
-            print 'Appending ' + repr(self.s[state].sym)
             stack.append(self.s[state].sym)
-            state = self.s[state].trans[0]
-            print 'next state is ' + repr(state)
-            if self.parse(
-                    mystr,
-                    stack=stack,
-                    state=state,
-                    curchar=curchar,
-                    depth=depth + 1) == 1:
-                return True
+            if len(self.s[state].trans) > 0:
+                state = self.s[state].trans[0]
+                if self.parse(
+                        mystr,
+                        stack=stack,
+                        state=state,
+                        curchar=curchar,
+                        depth=depth + 1) == 1:
+                    return True
             return False
         if self.s[state].type == 2:
             if len(stack) == 0:
