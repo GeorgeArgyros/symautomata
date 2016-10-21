@@ -6,7 +6,7 @@ import imp
 import tempfile
 ez_setup.use_setuptools()
 
-PROJECT = 'automata'
+PROJECT = 'symautomata'
 
 # Change docs/sphinx/conf.py too!
 VERSION = '0.0.1'
@@ -28,8 +28,8 @@ setup(
     author='George Argyros, Ioannis Stais',
     author_email='ioannis.stais@gmail.com',
 
-    url='https://github.com/GeorgeArgyros/automata',
-    download_url='https://github.com/GeorgeArgyros/automata/tarball/master',
+    url='https://github.com/GeorgeArgyros/symautomata',
+    download_url='https://github.com/GeorgeArgyros/symautomata/tarball/master',
 
     classifiers=['Development Status :: 3 - Alpha',
                  'Programming Language :: Python',

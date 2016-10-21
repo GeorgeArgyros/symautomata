@@ -113,7 +113,7 @@ class syms:
 
 class PythonDFA():
     """A DFA implementation that uses the
-    same interface with python automata"""
+    same interface with python symautomata"""
     def __init__(self, alphabet=createalphabet()):
         """
         Args:

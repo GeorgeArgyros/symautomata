@@ -31,7 +31,7 @@ class CnfPda:
           -  http://www.eng.utah.edu/~cs3100/lectures/l18/pda-notes.pdf
 
         If all of the grammar productions are in the Chomsky Normal Form,
-        then follow the template for constructing a pushdown automata:
+        then follow the template for constructing a pushdown symautomata:
 
         1. Start
         2. Push S

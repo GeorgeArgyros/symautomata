@@ -147,7 +147,7 @@ class SFAArc:
 
 class SFA:
     """
-       Symbolic Finite Automata (SFAs) are finite state automata
+       Symbolic Finite Automata (SFAs) are finite state symautomata
        in which the alphabet is given by a Boolean algebra that may
        have an infinite domain, and transitions are labeled with
        first-order predicates over such algebra
