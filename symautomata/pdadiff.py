@@ -29,7 +29,9 @@ class PdaDiff():
             None
         """
         self.mma = input_pda_a
-        self.mmb = input_dfa_b.copy()
+        self.mmb = None
+        if input_dfa_b:
+            self.mmb = input_dfa_b.copy()
         self.mmc = None
         self.alphabet = alphabet
 
@@ -184,6 +186,8 @@ class PdaDiff():
             A string from the Diff
         """
         return_string = None
+        if not self.mmc:
+            return ""
         method = 'PDASTRING'
         if method == 'PDASTRING':
             stringgen = PdaString()
