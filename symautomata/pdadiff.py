@@ -29,7 +29,7 @@ class PdaDiff():
             None
         """
         self.mma = input_pda_a
-        self.mmb = input_dfa_b
+        self.mmb = input_dfa_b.copy()
         self.mmc = None
         self.alphabet = alphabet
 
