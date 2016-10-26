@@ -84,7 +84,6 @@ def check_for_fst():
                               'will fallback to a python '
                               'implementation during execution'))
             else:
-                print 'The application will fallback to a python '
-                          'implementation during execution'
+                print 'The application will fallback to a python implementation during execution'
 
 check_for_fst()
