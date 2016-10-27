@@ -195,7 +195,7 @@ class PywrapfstDFA(object):
         """
         if src not in self.automaton.states():
             self.add_state()
-        arc = fst.Arc(self.isyms[char], self.osyms[char],  fst.Weight.One(self.automaton.weight_type), dst)
+        arc = fst.Arc(self.isyms[char], self.osyms[char],  fst.Weight.One(self.automaton.weight_type()), dst)
         self.automaton.add_arc(src, arc)
 
 
