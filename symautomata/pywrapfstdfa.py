@@ -57,7 +57,7 @@ class DFAState(object):
         if x == 'initial':
             return self.cur_fst.start == self.cur_node
         if x == 'final':
-            return self.cur_fst.final(self.cur_node) == fst.Weight.One(self.cur_fst.weight_type)
+            return self.cur_fst.final(self.cur_node) == fst.Weight.One(self.cur_fst.weight_type())
         return object.__getattribute__(self, x)
 
 
@@ -79,7 +79,7 @@ class DFAState(object):
             if value == True:
                 self.cur_fst.set_final(self.cur_node)
             else:
-                self.cur_fst.set_final(self.cur_node, fst.Weight.Zero(self.cur_fst.weight_type))
+                self.cur_fst.set_final(self.cur_node, fst.Weight.Zero(self.cur_fst.weight_type()))
         return object.__setattr__(self, x, value)
 
 
@@ -294,10 +294,10 @@ class PywrapfstDFA(object):
         """
         self._addsink(alphabet)
         for state in self.automaton.states():
-            if self.automaton.final(state) == fst.Weight.One(self.automaton.weight_type):
-                self.automaton.set_final(state, fst.Weight.Zero(self.automaton.weight_type))
+            if self.automaton.final(state) == fst.Weight.One(self.automaton.weight_type()):
+                self.automaton.set_final(state, fst.Weight.Zero(self.automaton.weight_type()))
             else:
-                self.automaton.set_final(state, fst.Weight.One(self.automaton.weight_type))
+                self.automaton.set_final(state, fst.Weight.One(self.automaton.weight_type()))
 
 
     def init_from_acceptor(self, acceptor):
