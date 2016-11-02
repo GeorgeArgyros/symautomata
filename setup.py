@@ -50,7 +50,7 @@ setup(
 )
 
 
-installpywrapfst = """
+installpywrapfst1 = """
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew doctor
 
@@ -98,6 +98,15 @@ for f in `find $PREFIX/include/fst -type f | xargs grep isspace | cut -f 1 -d ':
 done
 pip install openfst
 """
+installpywrapfst2="""
+wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.5.4.tar.gz
+tar zxvf openfst-1.5.4.tar.gz
+cd openfst-1.5.4
+./configure --enable-python
+make
+sudo make install
+"""
+
 
 def check_for_fst():
     try:
@@ -119,13 +128,20 @@ def check_for_fst():
                 ('* Install pywrapfst now? [y/n] ')
             )
             if install == 'y':
-                os.system(installpywrapfst)
+                os.system(installpywrapfst2)
                 try:
-                    print 'Checking again for pywrapfst module:',
+                    print 'Checking for pywrapfst module:',
                     imp.find_module('pywrapfst')
+                    print 'OK'
                 except ImportError:
                     print 'FAIL'
-                    print 'The application will fallback to a python implementation during execution'
+                    os.system(installpywrapfst1)
+                    try:
+                        print 'Checking again for pywrapfst module:',
+                        imp.find_module('pywrapfst')
+                    except ImportError:
+                        print 'FAIL'
+                        print 'The application will fallback to a python implementation during execution'
             else:
                 print 'The application will fallback to a python implementation during execution'
 
