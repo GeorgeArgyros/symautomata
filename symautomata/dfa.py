@@ -40,15 +40,25 @@ def bfs(graph, start):
                     new_path.append([char, next_state])
                     queue.append(new_path)
 
+
 try:
-    print 'Checking for fst module:',
-    imp.find_module('fst')
+    print 'Checking for pywrapfst module:',
+    imp.find_module('pywrapfst')
     print 'OK'
-    from fstdfa import FstDFA, TropicalWeight
+    from pywrapfstdfa import PywrapfstDFA, TropicalWeight
 
 
-    class DFA(FstDFA):
+    class DFA(PywrapfstDFA):
         """The DFA class implemented using openFst library"""
+
+        def copy(self):
+            mma = DFA()
+            mma.automaton = self.automaton.copy()
+            mma.alphabet = copy.deepcopy(self.alphabet)
+            mma.isyms = copy.deepcopy(self.isyms)
+            mma.osyms = copy.deepcopy(self.osyms)
+            return mma
+
         def shortest_string(self):
             """
             Uses BFS in order to find the shortest string
@@ -97,21 +107,14 @@ try:
 except ImportError:
     print 'FAIL'
     try:
-        print 'Checking for pywrapfst module:',
-        imp.find_module('pywrapfst')
+        print 'Checking for fst module:',
+        imp.find_module('fst')
         print 'OK'
-        from pywrapfstdfa import PywrapfstDFA, TropicalWeight
+        from fstdfa import FstDFA, TropicalWeight
 
-        class DFA(PywrapfstDFA):
+
+        class DFA(FstDFA):
             """The DFA class implemented using openFst library"""
-
-            def copy(self):
-                mma = DFA()
-                mma.automaton = self.automaton.copy()
-                mma.alphabet = copy.deepcopy(self.alphabet)
-                mma.isyms = copy.deepcopy(self.isyms)
-                mma.osyms = copy.deepcopy(self.osyms)
-                return mma
 
             def shortest_string(self):
                 """
