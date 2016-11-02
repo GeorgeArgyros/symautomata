@@ -42,7 +42,7 @@ def bfs(graph, start):
 
 try:
     print 'Checking for fst module:',
-    imp.find_module('fsta')
+    imp.find_module('fst')
     print 'OK'
     from fstdfa import FstDFA, TropicalWeight
 
