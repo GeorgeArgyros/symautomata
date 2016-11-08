@@ -2,6 +2,7 @@
 # !/usr/bin/python
 import imp
 import copy
+from alphabet import createalphabet
 from operator import attrgetter
 
 def bfs(graph, start):
@@ -50,6 +51,10 @@ try:
 
     class DFA(PywrapfstDFA):
         """The DFA class implemented using openFst library"""
+
+        def __init__(self, alphabet=createalphabet()):
+            self.alphabet = alphabet
+            super(DFA, self).__init__(alphabet)
 
         def copy(self):
             mma = DFA(self.alphabet)
@@ -115,6 +120,9 @@ except ImportError:
 
         class DFA(FstDFA):
             """The DFA class implemented using openFst library"""
+            def __init__(self, alphabet = createalphabet()):
+                self.alphabet = alphabet
+                super(DFA, self).__init__(alphabet)
 
             def shortest_string(self):
                 """
@@ -168,6 +176,10 @@ except ImportError:
 
         class DFA(PythonDFA):
             """The DFA class implemented using python"""
+
+            def __init__(self, alphabet = createalphabet()):
+                self.alphabet = alphabet
+                super(DFA, self).__init__(alphabet)
 
             def copy(self):
                 mma = DFA(self.alphabet)
