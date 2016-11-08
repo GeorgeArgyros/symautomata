@@ -281,7 +281,7 @@ class Flexparser:
             alphabet = self.alphabet
         else:
             alphabet = createalphabet()
-        mma = DFA()
+        mma = DFA(alphabet)
         for state in states:
             if state != 0:
                 for char in alphabet:

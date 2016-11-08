@@ -52,7 +52,7 @@ try:
         """The DFA class implemented using openFst library"""
 
         def copy(self):
-            mma = DFA()
+            mma = DFA(self.alphabet)
             mma.automaton = self.automaton.copy()
             mma.alphabet = copy.deepcopy(self.alphabet)
             mma.isyms = copy.deepcopy(self.isyms)
@@ -170,7 +170,7 @@ except ImportError:
             """The DFA class implemented using python"""
 
             def copy(self):
-                mma = DFA()
+                mma = DFA(self.alphabet)
                 mma.states = copy.deepcopy(self.states)
                 mma.alphabet = copy.deepcopy(self.alphabet)
                 mma.isyms = copy.deepcopy(self.isyms)

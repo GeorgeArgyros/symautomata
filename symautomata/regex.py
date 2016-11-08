@@ -26,11 +26,11 @@ class Regex:
         Returns:
             None
         """
-        self.mma = DFA()
-        self.mma.init_from_acceptor(input_fst_a)
         if alphabet is None:
             alphabet = createalphabet()
         self.alphabet = alphabet
+        self.mma = DFA(self.alphabet)
+        self.mma.init_from_acceptor(input_fst_a)
         # a is a matrix that holds all transitions
         # If there is a transition from state 0 to state 1 with the symbol x
         # then a[0][1]=x

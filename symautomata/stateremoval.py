@@ -19,10 +19,10 @@ class StateRemoval:
         Returns:
             None
         """
-        self.mma = DFA()
-        self.mma.init_from_acceptor(input_fst_a)
         if alphabet is None:
             alphabet = createalphabet()
+        self.mma = DFA(self.alphabet)
+        self.mma.init_from_acceptor(input_fst_a)
         self.alphabet = alphabet
 
         self.l_transitions = {}

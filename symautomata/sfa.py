@@ -227,7 +227,7 @@ class SFA:
         Returns:
             DFA: The generated DFA
         """
-        dfa = DFA()
+        dfa = DFA(self.alphabet)
         for state in self.states:
             for arc in state.arcs:
                 for char in arc.guard:
