@@ -111,7 +111,7 @@ class syms:
         return self.symbols
 
 
-class PythonDFA():
+class PythonDFA(object):
     """A DFA implementation that uses the
     same interface with python symautomata"""
     def __init__(self, alphabet=createalphabet()):
