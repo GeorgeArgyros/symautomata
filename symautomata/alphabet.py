@@ -28,10 +28,6 @@ def createalphabet(alphabetinput=None):
         return alpha
 
     alpha = []
-    for i in range(58, 64):
-        alpha.append(str(unichr(i)))
-    for i in range(32, 57):
-        alpha.append(str(unichr(i)))
-    for i in range(65, 126):
+    for i in range(32, 126):
         alpha.append(str(unichr(i)))
     return alpha
