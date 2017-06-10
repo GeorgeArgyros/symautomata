@@ -47,6 +47,7 @@ try:
     imp.find_module('pywrapfst')
     print 'OK'
     from pywrapfstdfa import PywrapfstDFA, TropicalWeight
+    import pywrapfst as fst
 
 
     class DFA(PywrapfstDFA):
@@ -85,16 +86,8 @@ try:
             """
             Automata Diff operation
             """
-            mma = DFA(self.alphabet)
-            mma.init_from_acceptor(self)
-            mmb = DFA(self.alphabet)
-            mmb.init_from_acceptor(input_mm)
-            mma.minimize()
-            mmb.complement(self.alphabet)
-            mmb.minimize()
             mmc = DFA(self.alphabet)
-            mmc.init_from_acceptor(mma & mmb)
-            mmc.minimize()
+            mmc.automaton = fst.difference(self.automaton, input_mm.automaton)
             return mmc
 
         def to_regex(self):
@@ -154,7 +147,6 @@ except ImportError:
                 mmb.minimize()
                 mmc = DFA(self.alphabet)
                 mmc.init_from_acceptor(mma & mmb)
-                mmc.minimize()
                 return mmc
 
             def to_regex(self):
@@ -219,7 +211,6 @@ except ImportError:
                 mmb.minimize()
                 mmc = DFA(self.alphabet)
                 mmc.init_from_acceptor(mma & mmb)
-                mmc.minimize()
                 return mmc
 
             def to_regex(self):
