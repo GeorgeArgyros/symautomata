@@ -26,7 +26,6 @@ def createalphabet(alphabetinput=None):
             for i in range(a, b):
                 alpha.append(str(unichr(i)))
         return alpha
-
     alpha = []
     for i in range(32, 127):
         alpha.append(str(unichr(i)))
