@@ -191,6 +191,7 @@ class PywrapfstDFA(object):
         """Adds a new state"""
         return self.automaton.add_state()
 
+
     def add_arc(self, src, dst, char):
         """Adds a new Arc
         Args:
@@ -399,7 +400,7 @@ class PywrapfstDFA(object):
         """Minimizes the DFA using Hopcroft algorithm"""
         self.determinize()
         self.automaton.minimize()
-        self._addsink(self.alphabet)
+        #self._addsink(self.alphabet)
 
     def intersect(self, other):
         """Constructs an unminimized DFA recognizing
