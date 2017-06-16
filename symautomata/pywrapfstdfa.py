@@ -26,6 +26,21 @@ def TropicalWeight(param):
     else:
         return True
 
+class DFAArc:
+    """The DFA transition"""
+
+    def __init__(self, srcstate_id, nextstate_id, ilabel=None):
+        """
+        The initialization function
+        Args:
+            srcstate_id (int): The source state identifier
+            nextstate_id (int): The destination state identifier
+            ilabel (str): The symbol corresponding to character for the transition
+        """
+        self.srcstate = srcstate_id
+        self.nextstate = nextstate_id
+        self.ilabel = ilabel
+
 
 class DFAState(object):
     """The DFA statess"""
@@ -48,7 +63,8 @@ class DFAState(object):
 
     def __getattribute__(self, x):
         if x == 'arcs':
-            return self.cur_fst.arcs(self.cur_node)
+            arcs = self.cur_fst.arcs(self.cur_node)
+            return [DFAArc(self.cur_node, arc.nextstate, arc.ilabel) for arc in arcs]
         if x == 'stateid':
             return self.cur_node
         if x == 'initial':
@@ -103,6 +119,7 @@ class syms:
 
     def __setitem__(self, char, num):
         """
+        Sets a symb
         Sets a symbol
         Args:
             char (str): The symbol character
