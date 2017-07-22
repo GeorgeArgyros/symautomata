@@ -7,12 +7,12 @@ from pda import PDAState
 
 class PdaString():
     """Retrieves a string from a PDA"""
-    statediag = []
-    quickresponse = {}
-    quickresponse_types = {}
 
     def __init__(self):
         """Class Initialization"""
+        self.statediag = []
+        self.quickresponse = {}
+        self.quickresponse_types = {}
         pass
     
     def _combine_rest_push(self):
@@ -510,6 +510,7 @@ class PdaString():
 
     def init(self, states, accepted):
         """Initialization of the indexing dictionaries"""
+        self.statediag = []
         for key in states:
             self.statediag.append(states[key])
         self.quickresponse = {}
