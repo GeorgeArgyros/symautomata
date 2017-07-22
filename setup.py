@@ -9,7 +9,7 @@ ez_setup.use_setuptools()
 PROJECT = 'symautomata'
 
 # Change docs/sphinx/conf.py too!
-VERSION = '0.0.10'
+VERSION = '0.0.11'
 
 from setuptools import setup, find_packages
 
@@ -42,7 +42,7 @@ setup(
     platforms=['Any'],
     scripts=[],
     provides=[],
-    install_requires=['FAdo', 'python-dateutil'],
+    install_requires=['python-dateutil','six'],
     namespace_packages=[],
     packages=find_packages(),
     include_package_data=True,

@@ -1,6 +1,6 @@
 """This module generates a PDA using a CFG as input"""
-from FAdo import cfg
 from cnfpda import CnfPda
+from cfggenerator import CNFGenerator
 
 class CfgPDA():
     """Create a PDA from a CFG"""
@@ -45,8 +45,7 @@ class CfgPDA():
         Returns:
             PDA: The generated PDA
         """
-        grammar = cfg.gRules(re_grammar, ":")
-        cnfgrammar = cfg.CNF(grammar)
+        cnfgrammar = CNFGenerator(re_grammar)
 
         if not self.alphabet:
             self._extract_alphabet(cnfgrammar)
@@ -54,15 +53,15 @@ class CfgPDA():
         cnftopda = CnfPda(self.alphabet)
         productions = {}
         nonterminals = []
-        nonterminals.append(cnfgrammar.Start)
-        for key in list(cnfgrammar.Nonterminals):
-            if key != cnfgrammar.Start:
+        nonterminals.append(cnfgrammar.init_symbol)
+        for key in list(cnfgrammar.grammar_nonterminals):
+            if key != cnfgrammar.init_symbol:
                 nonterminals.append(key)
-        for key in list(cnfgrammar.Nonterminals):
+        for key in list(cnfgrammar.grammar_nonterminals):
             j = 0
             productions[key] = {}
             # print 'testing '+key
-            for pair in cnfgrammar.Rules:
+            for pair in cnfgrammar.grammar_rules:
                 cnf_form = list(pair)
                 if cnf_form[0] == key:
                     productions[key][j] = {}
@@ -76,7 +75,7 @@ class CfgPDA():
                     j = j + 1
         return cnftopda.initialize(
             nonterminals, productions, list(
-                cnfgrammar.Terminals), splitstring)
+                cnfgrammar.grammar_terminals), splitstring)
 
     def yyparse(self, cfgfile, splitstring=0):
         """
