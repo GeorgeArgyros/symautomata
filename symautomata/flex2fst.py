@@ -65,7 +65,7 @@ class Flexparser:
         cur_line = None
         with open(self.outfile) as flex_file:
             for cur_line in flex_file:
-                if cur_line[0:35] == "static yyconst flex_int16_t yy_nxt[":
+                if cur_line[0:35] == "static yyconst flex_int16_t yy_nxt[" or cur_line[0:33] == "static const flex_int16_t yy_nxt[":
                     found = 1
                     # print 'Found yy_next declaration'
                     continue
@@ -120,9 +120,8 @@ class Flexparser:
         cur_line = None
         with open(self.outfile) as flex_file:
             for cur_line in flex_file:
-                if cur_line[0:37] == "static yyconst flex_int16_t yy_accept":
+                if cur_line[0:37] == "static yyconst flex_int16_t yy_accept" or cur_line[0:35] == "static const flex_int16_t yy_accept":
                     found = 1
-                    # print 'Found yy_accept declaration'
                     continue
                 if found == 1:
                     # print x
@@ -172,7 +171,8 @@ class Flexparser:
         with open(self.outfile) as flex_file:
             for cur_line in flex_file:
                 if cur_line[0:len("static yyconst yy_state_type yy_NUL_trans")
-                            ] == "static yyconst yy_state_type yy_NUL_trans":
+                            ] == "static yyconst yy_state_type yy_NUL_trans" or cur_line[0:len("static const yy_state_type yy_NUL_trans")
+                            ] == "static const yy_state_type yy_NUL_trans":
                     found = 1
                     # print 'Found yy_next declaration'
                     continue
